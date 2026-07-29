@@ -1,0 +1,75 @@
+{
+  "hero": {
+    "name": "Lorenzo-Snow",
+    "surname": "Osei-tutu",
+    "eyebrow": "Mechanical Engineering · Brigham Young University",
+    "subtitle": "Engineering precision meets manufacturing experience. From CNC mills to snowmobile assembly lines — I build things that work.",
+    "stats": [
+      { "label": "GPA", "value": "3.7" },
+      { "label": "Degree", "value": "Mech. Eng." },
+      { "label": "Graduation", "value": "Jan 2027" },
+      { "label": "Certification", "value": "Lean 6σ" }
+    ]
+  },
+  "about": {
+    "university": "Brigham Young University",
+    "degree": "B.S. Mechanical Engineering",
+    "gpa": "3.7 / 4.0",
+    "graduation": "January 2027",
+    "bio": "A hands-on mechanical engineer with real-world manufacturing experience at <strong>Polaris Industries</strong>. Certified in <strong>Lean Six Sigma (Green Belt)</strong>, proficient in <strong>CAD, CNC machining, C/C++, and Python</strong>. I bring a combination of engineering fundamentals, production-line expertise, and a rigorous work ethic shaped by years of international leadership and cross-cultural collaboration."
+  },
+  "skills": [
+    { "id": "s1", "category": "Manufacturing", "items": ["CNC Mill","CNC Manufacturing","Laser Cutting","G-code Programming"] },
+    { "id": "s2", "category": "Engineering Design", "items": ["CAD Design (Certified)","Structural Analysis (Statics)","Thermal Systems (Heat Transfer)","Fluid Mechanics","Mechanism & Machine Design","Differential Equations"] },
+    { "id": "s3", "category": "Software & Programming", "items": ["Python (NumPy) — Mechatronics","C / C++ — Embedded Systems","PID Controller Design","Control Systems Engineering","Microsoft Excel & Minitab"] },
+    { "id": "s4", "category": "Process & Quality", "items": ["Lean Six Sigma","DMAIC Methodology","Data Analysis","Process Improvement"] }
+  ],
+  "experience": [
+    {
+      "id": "e1", "company": "Design Imaging", "role": "Engineering Intern · Orem, Utah", "period": "Aug 2025 – Dec 2025",
+      "bullets": ["Supported manufacturing operations with hands-on technician responsibilities including equipment setup, troubleshooting, and process support","Collaborated with full-time engineers on ongoing projects to improve production efficiency and reliability","Designed and implemented custom jigs and fixtures to streamline assembly processes","Assisted in engineering design tasks, contributing to process optimization and continuous improvement initiatives"]
+    },
+    {
+      "id": "e2", "company": "Polaris Industries", "role": "Production Intern", "period": "Jan 2024 – Apr 2024",
+      "bullets": ["Operated as clutch operator on the snowmobile assembly line","Managed test shack operations and quality validation procedures","Active lean team member contributing to process efficiency initiatives","Earned Green Belt Lean Six Sigma certification during tenure"]
+    },
+    {
+      "id": "e3", "company": "Missionary Training Center", "role": "Administrative Assistant", "period": "Mar 2022",
+      "bullets": ["Used Microsoft Office Suite to organize and perform administrative roles","Coordinated missionary arrivals and departures with ecclesiastical leaders","Managed printing, photocopying, and scanning of critical documents","Oversaw MTC shuttle operations and logistics"]
+    },
+    {
+      "id": "e4", "company": "Ghana Missionary Training Center", "role": "Teacher & Training Coordinator", "period": "Jan 2019 – Dec 2021",
+      "bullets": ["Maintained and managed inventory of all training materials","Mentored missionaries from USA, Ghana, France, Nigeria, Congo, South Africa, and more","Led and facilitated large-scale international workshops"]
+    },
+    {
+      "id": "e5", "company": "Full Time Missionary Service", "role": "Financial Secretary", "period": "Apr 2018 – Jan 2019",
+      "bullets": ["Collaborated directly with Mission President to control mission budget","Disbursed and analyzed working funds of mission custodians","Accounted for mission expenses to the Mission President and Church auditors"]
+    }
+  ],
+  "projects": [
+    {
+      "id": "p1", "tag": "Lean Manufacturing · Polaris",
+      "title": "Kaizen Project — Subassembly Relocation",
+      "description": "The objective of this Kaizen project was to identify and relocate moveable subassemblies off the main production line to improve operator efficiency and reinforce a lean manufacturing culture. The team measured the current footprint of existing subassembly stations and identified optimal future locations within the plant, reducing line congestion and supporting continuous flow.",
+      "meta": "Line C · Roseau, MN · March 2024 · A3 Sub Assembly Review",
+      "images": []
+    },
+    {
+      "id": "p2", "tag": "Personal Project · Mechatronics",
+      "title": "The Time Machine — Automated Wake-Up System",
+      "description": "A self-designed embedded system built to solve a real personal problem: waking up to sound alone was never enough — light was always needed. The device mounts near a standard light switch and features a 4×4 keypad for setting a wake-up timer, a buzzer alarm, and a servo-actuated arm that physically flips the switch when the timer expires. A PIR motion sensor detects movement once the user is up and automatically resets the entire system.",
+      "meta": "C / C++ · Microcontroller · Laser-Cut Enclosure · PIR Sensor · Servo Actuator",
+      "images": []
+    }
+  ],
+  "credentials": [
+    { "id": "c1", "icon": "🏆", "name": "Green Belt — Lean Six Sigma", "detail": "January 2024 · Polaris Industries\nApplied DMAIC principles; used Microsoft Excel and Minitab for data analysis and process control." },
+    { "id": "c2", "icon": "📐", "name": "Statics — Engineering Course", "detail": "April 2023 · Brigham Young University\nAnalyzed forces in machines, trusses, columns, and beams under pinned, cantilever, and roller constraints." },
+    { "id": "c3", "icon": "⚙️", "name": "B.S. Mechanical Engineering", "detail": "Expected Jan 2027 · Brigham Young University · 3.7 GPA\nCoursework: Heat Transfer, Fluid Mechanics, Differential Equations, CAD Design, Mechatronics, Controls." }
+  ],
+  "contact": {
+    "email": "lorenzsnow@outlook.com",
+    "linkedin": "https://www.linkedin.com/in/lorenzosnow",
+    "availability": "Open to full-time mechanical engineering roles nationwide. Willing to relocate anywhere."
+  }
+}

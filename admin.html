@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Portfolio Admin — Lorenzo-Snow</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F7FA;--surface:#fff;--dark:#0F1923;--primary:#1B4F8A;--accent:#E8A020;--accent-light:#FFF3D6;--muted:#8892A0;--border:#DDE2EA;--text:#2C3547;--danger:#DC2626;--success:#16A34A}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
+.sidebar{width:230px;background:var(--dark);display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:100;overflow-y:auto}
+.sidebar-brand{padding:1.25rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand-name{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;color:#fff}.brand-name span{color:var(--accent)}
+.brand-sub{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:.2rem;text-transform:uppercase;letter-spacing:.1em}
+.nav-section{padding:.5rem 0}.nav-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.12em;padding:.5rem 1.25rem}
+.nav-item{display:flex;align-items:center;gap:.65rem;padding:.6rem 1.25rem;color:rgba(255,255,255,.55);cursor:pointer;font-size:.85rem;font-weight:500;transition:all .15s;border-left:3px solid transparent}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.05)}.nav-item.active{color:#fff;background:rgba(232,160,32,.1);border-left-color:var(--accent)}
+.sidebar-footer{margin-top:auto;padding:1rem;border-top:1px solid rgba(255,255,255,.08)}
+.preview-btn{display:flex;align-items:center;justify-content:center;gap:.4rem;width:100%;padding:.6rem;background:rgba(232,160,32,.15);border:1px solid rgba(232,160,32,.3);border-radius:6px;color:var(--accent);font-size:.8rem;font-weight:600;cursor:pointer;text-decoration:none}
+.preview-btn:hover{background:rgba(232,160,32,.25)}
+.main{margin-left:230px;flex:1;display:flex;flex-direction:column}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:.75rem 1.75rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.page-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:var(--dark)}
+.topbar-right{display:flex;align-items:center;gap:.75rem}
+.status{display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--muted)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#ccc}.status-dot.saved{background:var(--success)}.status-dot.saving{background:var(--accent)}.status-dot.error{background:var(--danger)}
+.save-btn{padding:.5rem 1.1rem;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer}
+.save-btn:hover{background:#1a4a7e}.save-btn:disabled{opacity:.5;cursor:not-allowed}
+.content{padding:1.5rem;flex:1}.panel{display:none}.panel.active{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1rem}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.card-title{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--dark)}
+label{display:block;font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem;margin-top:.75rem}
+label:first-child{margin-top:0}
+input,textarea,select{width:100%;padding:.55rem .8rem;border:1px solid var(--border);border-radius:6px;font-family:'Inter',sans-serif;font-size:.875rem;color:var(--dark);background:var(--bg)}
+input:focus,textarea:focus{outline:none;border-color:var(--primary);background:#fff}
+textarea{resize:vertical;min-height:80px;line-height:1.6}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.875rem}
+.hint{font-size:.72rem;color:var(--muted);margin-top:.25rem}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem}
+.stat-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.75rem}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .9rem;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn-primary{background:var(--primary);color:#fff}.btn-accent{background:var(--accent);color:var(--dark)}.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-danger{background:transparent;color:var(--danger);border:1px solid transparent}.btn-danger:hover{background:#fef2f2;border-color:#fca5a5}
+.btn-sm{padding:.3rem .65rem;font-size:.75rem}
+.btn-icon{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;background:transparent;border:1px solid var(--border);cursor:pointer;color:var(--muted)}
+.btn-icon:hover{border-color:var(--danger);color:var(--danger)}
+.item-block{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:.875rem}
+.item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.875rem}
+.item-label{font-family:'Space Grotesk',sans-serif;font-size:.875rem;font-weight:700;color:var(--dark)}
+.item-actions{display:flex;gap:.3rem}
+.skills-chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.5rem}
+.skill-chip{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .6rem;background:var(--accent-light);border:1px solid #F5D070;border-radius:20px;font-size:.78rem;color:var(--dark)}
+.skill-chip button{background:none;border:none;cursor:pointer;color:var(--muted);font-size:.9rem;line-height:1}
+.skill-chip button:hover{color:var(--danger)}
+.add-row{display:flex;gap:.5rem;margin-top:.65rem}.add-row input{flex:1}
+.bullets-list .bullet-row{display:flex;gap:.4rem;margin-bottom:.45rem;align-items:flex-start}.bullet-row textarea{min-height:52px}
+.proj-imgs{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.5rem}
+.proj-img-chip{position:relative;width:76px;height:56px;border-radius:6px;overflow:hidden;border:1px solid var(--border)}
+.proj-img-chip img{width:100%;height:100%;object-fit:cover}
+.proj-img-chip .rm{position:absolute;top:2px;right:2px;background:var(--danger);color:#fff;border:none;border-radius:3px;width:16px;height:16px;font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:1.75rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg)}
+.upload-zone:hover,.upload-zone.over{border-color:var(--primary);background:#f0f5ff}
+.upload-zone input{display:none}
+.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.75rem;margin-top:1rem}
+.img-thumb{position:relative;border-radius:8px;overflow:hidden;border:2px solid var(--border);aspect-ratio:4/3}
+.img-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.img-thumb .overlay{position:absolute;inset:0;background:rgba(15,25,35,.7);display:none;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:.4rem}
+.img-thumb:hover .overlay{display:flex}
+.overlay-url{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#fff;text-align:center;word-break:break-all;max-height:2rem;overflow:hidden}
+.overlay-btns{display:flex;gap:.3rem}
+.o-btn{padding:.25rem .6rem;border-radius:4px;font-size:.68rem;font-weight:600;cursor:pointer;border:none}
+.o-copy{background:var(--accent);color:var(--dark)}.o-del{background:var(--danger);color:#fff}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:.65rem 1.1rem;border-radius:8px;font-size:.85rem;font-weight:600;color:#fff;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s}
+.toast.show{transform:none;opacity:1}.toast.success{background:var(--success)}.toast.error{background:var(--danger)}.toast.info{background:var(--primary)}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="brand-name">L<span>.</span>S. Osei-tutu</div><div class="brand-sub">Portfolio Admin</div></div>
+  <div class="nav-section">
+    <div class="nav-label">Content</div>
+    <div class="nav-item active" data-panel="hero">🏠 Hero</div>
+    <div class="nav-item" data-panel="about">👤 About</div>
+    <div class="nav-item" data-panel="skills">⚙️ Skills</div>
+    <div class="nav-item" data-panel="exp">💼 Experience</div>
+    <div class="nav-item" data-panel="projects">🔧 Projects</div>
+    <div class="nav-item" data-panel="creds">🎓 Credentials</div>
+    <div class="nav-item" data-panel="contact">✉️ Contact</div>
+    <div class="nav-label" style="margin-top:.5rem">Media</div>
+    <div class="nav-item" data-panel="media">🖼️ Image Manager</div>
+  </div>
+  <div class="sidebar-footer"><a href="/" target="_blank" class="preview-btn">↗ Preview Portfolio</a></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="page-title" id="pageTitle">Hero</div>
+    <div class="topbar-right">
+      <div class="status"><div class="status-dot saved" id="statusDot"></div><span id="statusText">All saved</span></div>
+      <button class="save-btn" id="saveBtn" onclick="saveAll()">💾 Save</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="panel active" id="panel-hero">
+      <div class="card">
+        <div class="card-title" style="margin-bottom:1rem">Name & Tagline</div>
+        <div class="grid-2"><div><label>First Name</label><input id="hero-name"></div><div><label>Last Name</label><input id="hero-surname"></div></div>
+        <label>Eyebrow Line</label><input id="hero-eyebrow">
+        <label>Subtitle Paragraph</label><textarea id="hero-subtitle" rows="3"></textarea>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:.875rem">Stats Bar</div>
+        <div class="stats-grid" id="stats-grid"></div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:.65rem" onclick="addStat()">+ Add Stat</button>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="panel" id="panel-about">
+      <div class="card">
+        <div class="grid-2">
+          <div><label>University</label><input id="about-university"></div>
+          <div><label>GPA Display</label><input id="about-gpa"></div>
+          <div><label>Degree</label><input id="about-degree"></div>
+          <div><label>Expected Graduation</label><input id="about-graduation"></div>
+        </div>
+        <label>Bio (HTML ok: &lt;strong&gt;)</label><textarea id="about-bio" rows="5"></textarea>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="panel" id="panel-skills">
+      <div id="skills-container"></div>
+      <button class="btn btn-accent" onclick="addSkillGroup()">+ Add Skill Category</button>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="panel" id="panel-exp">
+      <div id="exp-container"></div>
+      <button class="btn btn-accent" onclick="addExp()">+ Add Experience</button>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="panel" id="panel-projects">
+      <div id="projects-container"></div>
+      <button class="btn btn-accent" onclick="addProject()">+ Add Project</button>
+    </div>
+
+    <!-- CREDENTIALS -->
+    <div class="panel" id="panel-creds">
+      <div id="creds-container"></div>
+      <button class="btn btn-accent" onclick="addCred()">+ Add Credential</button>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="panel" id="panel-contact">
+      <div class="card">
+        <label>Email</label><input id="contact-email" type="email">
+        <label>LinkedIn URL</label><input id="contact-linkedin" type="url">
+        <label>Availability Text</label><textarea id="contact-availability" rows="3"></textarea>
+      </div>
+    </div>
+
+    <!-- MEDIA -->
+    <div class="panel" id="panel-media">
+      <div class="card">
+        <div class="card-title" style="margin-bottom:.875rem">Upload Images</div>
+        <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+          <input type="file" id="fileInput" multiple accept="image/*" onchange="handleFiles(event.target.files)">
+          <div style="font-size:1.75rem;margin-bottom:.4rem">📸</div>
+          <div style="font-size:.9rem;color:var(--muted)">Click or drag images here</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:.2rem">JPG · PNG · WEBP · up to 20MB each</div>
+        </div>
+        <div id="upMsg" style="font-size:.8rem;color:var(--muted);margin-top:.5rem;display:none"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Your Images</div>
+          <button class="btn btn-ghost btn-sm" onclick="loadImages()">🔄 Refresh</button>
+        </div>
+        <p class="hint" style="margin-bottom:.75rem">Click <strong>Copy URL</strong> on any image then paste the URL into a project's image list.</p>
+        <div class="img-grid" id="imgGrid"><p style="color:var(--muted);font-size:.875rem">No images yet.</p></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let DATA = {}, dirty = false;
+
+async function init() {
+  try {
+    DATA = await (await fetch('/api/data')).json();
+    renderAll(); loadImages(); setStatus('saved','All saved');
+  } catch(e) { showToast('Cannot connect to server — is it running?','error'); }
+}
+
+function renderAll(){ renderHero();renderAbout();renderSkills();renderExp();renderProjects();renderCreds();renderContact(); }
+
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    item.classList.add('active');
+    document.getElementById('panel-'+item.dataset.panel).classList.add('active');
+    document.getElementById('pageTitle').textContent=item.textContent.trim();
+    if(item.dataset.panel==='media') loadImages();
+  });
+});
+
+async function saveAll(){
+  collectAll(); setStatus('saving','Saving…'); document.getElementById('saveBtn').disabled=true;
+  try{
+    const r=await fetch('/api/data',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(DATA)});
+    const res=await r.json();
+    if(res.success){setStatus('saved','All saved');showToast('Saved!','success');dirty=false;}
+    else{setStatus('error','Error');showToast('Save failed','error');}
+  }catch(e){setStatus('error','Error');showToast(e.message,'error');}
+  document.getElementById('saveBtn').disabled=false;
+}
+
+function collectAll(){
+  DATA.hero={...DATA.hero,name:v('hero-name'),surname:v('hero-surname'),eyebrow:v('hero-eyebrow'),subtitle:v('hero-subtitle'),stats:collectStats()};
+  DATA.about={...DATA.about,university:v('about-university'),gpa:v('about-gpa'),degree:v('about-degree'),graduation:v('about-graduation'),bio:v('about-bio')};
+  DATA.contact={email:v('contact-email'),linkedin:v('contact-linkedin'),availability:v('contact-availability')};
+  DATA.skills=collectSkills(); DATA.experience=collectExp(); DATA.projects=collectProjects(); DATA.credentials=collectCreds();
+}
+
+function v(id){const el=document.getElementById(id);return el?el.value.trim():'';}
+function sv(id,val){const el=document.getElementById(id);if(el)el.value=val||'';}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function setStatus(t,txt){document.getElementById('statusDot').className='status-dot '+t;document.getElementById('statusText').textContent=txt;}
+
+// HERO
+function renderHero(){const h=DATA.hero||{};sv('hero-name',h.name);sv('hero-surname',h.surname);sv('hero-eyebrow',h.eyebrow);sv('hero-subtitle',h.subtitle);renderStats(h.stats||[]);}
+function renderStats(stats){
+  document.getElementById('stats-grid').innerHTML=stats.map((s,i)=>`<div class="stat-item"><label>Label</label><input id="sl-${i}" value="${esc(s.label)}"><label>Value</label><input id="sv-${i}" value="${esc(s.value)}"><button class="btn btn-danger btn-sm" style="margin-top:.4rem;width:100%" onclick="removeStat(${i})">Remove</button></div>`).join('');
+}
+function collectStats(){return Array.from(document.querySelectorAll('[id^="sl-"]')).map((_,i)=>({label:(document.getElementById('sl-'+i)||{value:''}).value.trim(),value:(document.getElementById('sv-'+i)||{value:''}).value.trim()}));}
+function addStat(){DATA.hero.stats=collectStats();DATA.hero.stats.push({label:'Label',value:'Value'});renderStats(DATA.hero.stats);}
+function removeStat(i){DATA.hero.stats=collectStats();DATA.hero.stats.splice(i,1);renderStats(DATA.hero.stats);}
+
+// ABOUT
+function renderAbout(){const a=DATA.about||{};sv('about-university',a.university);sv('about-gpa',a.gpa);sv('about-degree',a.degree);sv('about-graduation',a.graduation);sv('about-bio',a.bio);}
+
+// SKILLS
+function renderSkills(){
+  document.getElementById('skills-container').innerHTML=(DATA.skills||[]).map((g,gi)=>`
+    <div class="item-block"><div class="item-header"><div class="item-label" id="sgl-${gi}">📂 ${esc(g.category)}</div><div class="item-actions">
+      <button class="btn-icon" onclick="move('skills',${gi},-1)">↑</button><button class="btn-icon" onclick="move('skills',${gi},1)">↓</button><button class="btn-icon" onclick="removeGroup(${gi})">🗑</button></div></div>
+    <label>Category Name</label><input id="sgc-${gi}" value="${esc(g.category)}" oninput="document.getElementById('sgl-${gi}').textContent='📂 '+this.value">
+    <label>Skills</label><div class="skills-chips" id="sgch-${gi}">${(g.items||[]).map((s,si)=>`<span class="skill-chip">${esc(s)}<button onclick="rmSkill(${gi},${si})">×</button></span>`).join('')}</div>
+    <div class="add-row"><input id="sgnew-${gi}" placeholder="Add skill…" onkeydown="if(event.key==='Enter'){addSkill(${gi});event.preventDefault()}"><button class="btn btn-primary btn-sm" onclick="addSkill(${gi})">Add</button></div>
+    </div>`).join('');
+}
+function collectSkills(){return(DATA.skills||[]).map((g,gi)=>({...g,category:(document.getElementById('sgc-'+gi)||{value:g.category}).value.trim(),items:Array.from(document.querySelectorAll('#sgch-'+gi+' .skill-chip')).map(c=>c.textContent.slice(0,-1).trim())}));}
+function addSkill(gi){const inp=document.getElementById('sgnew-'+gi);const val=inp?.value.trim();if(!val)return;DATA.skills=collectSkills();DATA.skills[gi].items.push(val);inp.value='';renderSkills();}
+function rmSkill(gi,si){DATA.skills=collectSkills();DATA.skills[gi].items.splice(si,1);renderSkills();}
+function addSkillGroup(){DATA.skills=collectSkills();DATA.skills.push({id:'s'+Date.now(),category:'New Category',items:[]});renderSkills();}
+function removeGroup(gi){if(!confirm('Remove this skill category?'))return;DATA.skills=collectSkills();DATA.skills.splice(gi,1);renderSkills();}
+
+// EXPERIENCE
+function renderExp(){
+  document.getElementById('exp-container').innerHTML=(DATA.experience||[]).map((e,i)=>`
+    <div class="item-block"><div class="item-header"><div class="item-label">💼 ${esc(e.company)}</div><div class="item-actions">
+      <button class="btn-icon" onclick="move('experience',${i},-1)">↑</button><button class="btn-icon" onclick="move('experience',${i},1)">↓</button><button class="btn-icon" onclick="rmExp(${i})">🗑</button></div></div>
+    <div class="grid-2"><div><label>Company</label><input id="eco-${i}" value="${esc(e.company)}"></div><div><label>Role</label><input id="ero-${i}" value="${esc(e.role)}"></div></div>
+    <label>Period</label><input id="ep-${i}" value="${esc(e.period)}">
+    <label>Bullets</label><div class="bullets-list" id="ebl-${i}">${(e.bullets||[]).map((b,bi)=>`<div class="bullet-row"><textarea id="eb-${i}-${bi}" rows="2">${esc(b)}</textarea><button class="btn-icon" onclick="rmBullet(${i},${bi})">🗑</button></div>`).join('')}</div>
+    <button class="btn btn-ghost btn-sm" style="margin-top:.4rem" onclick="addBullet(${i})">+ Bullet</button></div>`).join('');
+}
+function collectExp(){return(DATA.experience||[]).map((e,i)=>({...e,company:(document.getElementById('eco-'+i)||{value:''}).value.trim(),role:(document.getElementById('ero-'+i)||{value:''}).value.trim(),period:(document.getElementById('ep-'+i)||{value:''}).value.trim(),bullets:Array.from(document.querySelectorAll('[id^="eb-'+i+'-"]')).map(el=>el.value.trim()).filter(Boolean)}));}
+function addBullet(i){DATA.experience=collectExp();DATA.experience[i].bullets.push('');renderExp();}
+function rmBullet(i,bi){DATA.experience=collectExp();DATA.experience[i].bullets.splice(bi,1);renderExp();}
+function addExp(){DATA.experience=collectExp();DATA.experience.unshift({id:'e'+Date.now(),company:'New Company',role:'Job Title',period:'Mon YYYY – Mon YYYY',bullets:['']});renderExp();}
+function rmExp(i){if(!confirm('Remove?'))return;DATA.experience=collectExp();DATA.experience.splice(i,1);renderExp();}
+
+// PROJECTS
+function renderProjects(){
+  document.getElementById('projects-container').innerHTML=(DATA.projects||[]).map((p,i)=>`
+    <div class="item-block"><div class="item-header"><div class="item-label">🔧 ${esc(p.title)}</div><div class="item-actions">
+      <button class="btn-icon" onclick="move('projects',${i},-1)">↑</button><button class="btn-icon" onclick="move('projects',${i},1)">↓</button><button class="btn-icon" onclick="rmProject(${i})">🗑</button></div></div>
+    <label>Tag</label><input id="ptag-${i}" value="${esc(p.tag)}">
+    <label>Title</label><input id="ptitle-${i}" value="${esc(p.title)}">
+    <label>Description</label><textarea id="pdesc-${i}" rows="4">${esc(p.description)}</textarea>
+    <label>Meta / Tech Tags</label><input id="pmeta-${i}" value="${esc(p.meta)}">
+    <label>Images <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.72rem">(upload in Image Manager, then Copy URL and paste below)</span></label>
+    <div class="proj-imgs" id="pimgs-${i}">${(p.images||[]).map((url,ii)=>`<div class="proj-img-chip"><img src="${esc(url)}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2276%22 height=%2256%22><rect fill=%22%23eee%22 width=%2276%22 height=%2256%22/></svg>'"><button class="rm" onclick="rmProjImg(${i},${ii})">×</button></div>`).join('')}</div>
+    <div class="add-row" style="margin-top:.5rem"><input id="pnimg-${i}" placeholder="Paste image URL e.g. /images/photo.jpg" onkeydown="if(event.key==='Enter'){addProjImg(${i});event.preventDefault()}"><button class="btn btn-primary btn-sm" onclick="addProjImg(${i})">Add</button></div>
+    </div>`).join('');
+}
+function collectProjects(){return(DATA.projects||[]).map((p,i)=>({...p,tag:(document.getElementById('ptag-'+i)||{value:''}).value.trim(),title:(document.getElementById('ptitle-'+i)||{value:''}).value.trim(),description:(document.getElementById('pdesc-'+i)||{value:''}).value.trim(),meta:(document.getElementById('pmeta-'+i)||{value:''}).value.trim(),images:Array.from(document.querySelectorAll('#pimgs-'+i+' .proj-img-chip img')).map(img=>img.getAttribute('src'))}));}
+function addProjImg(i){const inp=document.getElementById('pnimg-'+i);const url=inp?.value.trim();if(!url)return;DATA.projects=collectProjects();DATA.projects[i].images.push(url);inp.value='';renderProjects();}
+function rmProjImg(i,ii){DATA.projects=collectProjects();DATA.projects[i].images.splice(ii,1);renderProjects();}
+function addProject(){DATA.projects=collectProjects();DATA.projects.push({id:'p'+Date.now(),tag:'Category · Context',title:'New Project',description:'Describe your project.',meta:'Tools · Tech',images:[]});renderProjects();}
+function rmProject(i){if(!confirm('Remove?'))return;DATA.projects=collectProjects();DATA.projects.splice(i,1);renderProjects();}
+
+// CREDENTIALS
+function renderCreds(){
+  document.getElementById('creds-container').innerHTML=(DATA.credentials||[]).map((c,i)=>`
+    <div class="item-block"><div class="item-header"><div class="item-label">${esc(c.icon||'🎓')} ${esc(c.name)}</div><div class="item-actions">
+      <button class="btn-icon" onclick="move('credentials',${i},-1)">↑</button><button class="btn-icon" onclick="move('credentials',${i},1)">↓</button><button class="btn-icon" onclick="rmCred(${i})">🗑</button></div></div>
+    <div class="grid-2"><div><label>Icon (emoji)</label><input id="cico-${i}" value="${esc(c.icon||'🎓')}" maxlength="4" style="font-size:1.2rem;text-align:center"></div><div><label>Name</label><input id="cname-${i}" value="${esc(c.name)}"></div></div>
+    <label>Detail</label><textarea id="cdet-${i}" rows="3">${esc(c.detail)}</textarea></div>`).join('');
+}
+function collectCreds(){return(DATA.credentials||[]).map((c,i)=>({...c,icon:(document.getElementById('cico-'+i)||{value:'🎓'}).value,name:(document.getElementById('cname-'+i)||{value:''}).value.trim(),detail:(document.getElementById('cdet-'+i)||{value:''}).value.trim()}));}
+function addCred(){DATA.credentials=collectCreds();DATA.credentials.push({id:'c'+Date.now(),icon:'🎓',name:'New Credential',detail:'Date · Institution\nDescription.'});renderCreds();}
+function rmCred(i){if(!confirm('Remove?'))return;DATA.credentials=collectCreds();DATA.credentials.splice(i,1);renderCreds();}
+
+// CONTACT
+function renderContact(){const c=DATA.contact||{};sv('contact-email',c.email);sv('contact-linkedin',c.linkedin);sv('contact-availability',c.availability);}
+
+// MOVE
+function move(section,i,dir){
+  const col={skills:collectSkills,experience:collectExp,projects:collectProjects,credentials:collectCreds};
+  const ren={skills:renderSkills,experience:renderExp,projects:renderProjects,credentials:renderCreds};
+  DATA[section]=col[section]();const arr=DATA[section];const j=i+dir;if(j<0||j>=arr.length)return;[arr[i],arr[j]]=[arr[j],arr[i]];ren[section]();
+}
+
+// IMAGES
+async function loadImages(){
+  try{
+    const imgs=await(await fetch('/api/images')).json();
+    const g=document.getElementById('imgGrid');
+    if(!imgs.length){g.innerHTML='<p style="color:var(--muted);font-size:.875rem">No images yet.</p>';return;}
+    g.innerHTML=imgs.map(img=>`<div class="img-thumb"><img src="${esc(img.url)}" loading="lazy"><div class="overlay"><div class="overlay-url">${esc(img.url)}</div><div class="overlay-btns"><button class="o-btn o-copy" onclick="copyURL('${esc(img.url)}')">Copy URL</button><button class="o-btn o-del" onclick="delImg('${esc(img.filename)}',this.closest('.img-thumb'))">Delete</button></div></div></div>`).join('');
+  }catch(e){showToast('Could not load images','error');}
+}
+function copyURL(url){navigator.clipboard.writeText(url).then(()=>showToast('Copied: '+url,'info'));}
+async function delImg(filename,el){if(!confirm('Delete?'))return;await fetch('/api/images/'+encodeURIComponent(filename),{method:'DELETE'});el.remove();showToast('Deleted','success');}
+async function handleFiles(files){
+  const arr=Array.from(files);const msg=document.getElementById('upMsg');msg.style.display='block';
+  for(let i=0;i<arr.length;i++){
+    msg.textContent=`Uploading ${i+1}/${arr.length}: ${arr[i].name}…`;
+    const fd=new FormData();fd.append('image',arr[i]);
+    try{const r=await(await fetch('/api/upload',{method:'POST',body:fd})).json();if(r.error)showToast(r.error,'error');else showToast('Uploaded: '+r.filename,'success');}
+    catch(e){showToast(e.message,'error');}
+  }
+  msg.style.display='none';loadImages();
+}
+const dz=document.getElementById('dropZone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');const files=Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/'));if(files.length)handleFiles(files);});
+
+function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',3500);}
+document.addEventListener('input',()=>{if(!dirty){dirty=true;setStatus('saving','Unsaved changes');}});
+setInterval(()=>{if(dirty)saveAll();},60000);
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();saveAll();}});
+init();
+</script>
+</body></html>
